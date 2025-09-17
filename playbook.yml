@@ -1,7 +1,37 @@
 ---
 - hosts: all
   become: true
+  vars:
+    redmine_image: redmine:5.1.2
+    redmine_container_name: redmine
+    redmine_env_file: .env.redmine
   
   roles:
     - geerlingguy.pip
     - geerlingguy.docker
+
+  tasks:
+    - name: Create .env for Redmine
+      ansible.builtin.template:
+        src: templates/redmine.env.j2
+        dest: "{{ ansible_user_dir }}/{{ redmine_env_file }}"
+        mode: '0600'
+      tags: deploy
+
+    - name: Stop and remove old Redmine container
+      ansible.builtin.docker_container:
+        name: "{{ redmine_container_name }}"
+        state: absent
+      ignore_errors: yes
+      tags: deploy
+
+    - name: Run Redmine container
+      ansible.builtin.docker_container:
+        name: "{{ redmine_container_name }}"
+        image: "{{ redmine_image }}"
+        env_file: "{{ ansible_user_dir }}/{{ redmine_env_file }}"
+        ports:
+          - "{{ redmine_port }}:3000"
+        restart_policy: always
+        state: started
+      tags: deploy
