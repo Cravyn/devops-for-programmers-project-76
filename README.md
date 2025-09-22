@@ -20,7 +20,7 @@ make prepare
 1. Установите зависимости:
 make requirements
 2. Укажите IP серверов и пользователей в `inventory.ini`.
-3. Укажите нужный порт в `group_vars/all.yml` переменной `redmine_port`.
+3. Укажите нужный порт в `group_vars/webservers/main.yml` переменной `redmine_port`.
 
 ## Деплой
 Для деплоя приложения выполните:

@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: webservers
   become: true
   vars:
     redmine_image: redmine:5.1.2
@@ -36,9 +36,6 @@
         state: started
       tags: deploy
 
-- hosts: webservers
-  become: true
-  tasks:
     - name: Import the Datadog Agent role from the Datadog collection
       import_role:
         name: datadog.dd.agent
