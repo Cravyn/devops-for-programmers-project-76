@@ -1,11 +1,12 @@
 ---
-- hosts: webservers
+- name: Second project
+  hosts: webservers
   become: true
   vars:
     redmine_image: redmine:5.1.2
     redmine_container_name: redmine
     redmine_env_file: .env.redmine
-  
+
   roles:
     - role: geerlingguy.pip
     - role: geerlingguy.docker
@@ -22,7 +23,7 @@
       community.docker.docker_container:
         name: "{{ redmine_container_name }}"
         state: absent
-      ignore_errors: yes
+      failed_when: false
       tags: deploy
 
     - name: Run Redmine container
