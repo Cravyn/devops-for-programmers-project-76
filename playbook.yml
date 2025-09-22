@@ -19,14 +19,14 @@
       tags: deploy
 
     - name: Stop and remove old Redmine container
-      ansible.builtin.docker_container:
+      community.docker.docker_container:
         name: "{{ redmine_container_name }}"
         state: absent
       ignore_errors: yes
       tags: deploy
 
     - name: Run Redmine container
-      ansible.builtin.docker_container:
+      community.docker.docker_container:
         name: "{{ redmine_container_name }}"
         image: "{{ redmine_image }}"
         env_file: "{{ ansible_user_dir }}/{{ redmine_env_file }}"
@@ -37,7 +37,7 @@
       tags: deploy
 
     - name: Import the Datadog Agent role from the Datadog collection
-      import_role:
+      ansible.builtin.import_role:
         name: datadog.dd.agent
       vars:
         datadog_api_key: "{{ DATADOG_API_KEY }}"
